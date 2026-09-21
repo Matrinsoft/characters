@@ -1,0 +1,69 @@
+{
+    "id" : "org.gnome.CharactersDevel",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "command" : "gnome-characters",
+    "sdk" : "org.gnome.Sdk",
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--metadata=X-DConf=migrate-path=/org/gnome/Characters/"
+    ],
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        "*.a",
+        "/share/doc",
+        "/share/gir-1.0"
+    ],
+    "modules" : [
+        {
+            "name" : "gnome-desktop",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Ddebug_tools=false",
+                "-Ddesktop_docs=false",
+                "-Dqr=disabled",
+                "-Dudev=disabled",
+                "-Dlegacy_library=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gnome-desktop"
+                }
+            ]
+        },
+        {
+            "name" : "gnome-characters",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "run-tests" : true,
+            "build-options" : {
+                "test-args" : [
+                    "--device=dri",
+                    "--share=ipc",
+                    "--socket=fallback-x11",
+                    "--socket=wayland"
+                ]
+            },
+            "config-opts" : [
+                "-Dprofile=development"
+            ],
+            "sources" : [
+                {
+                    "type" : "dir",
+                    "path" : "../../"
+                }
+            ]
+        }
+    ]
+}
